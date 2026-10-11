@@ -341,6 +341,7 @@ export default function SessionExplorer() {
                   />
 
                   <Tooltip
+                    cursor={false}
                     formatter={(value) => [
                       formatCorrelation(value),
                       "Pearson correlation"
@@ -357,8 +358,8 @@ export default function SessionExplorer() {
                         key={item.method}
                         fill={
                           index === 0
-                            ? "#a68aff"
-                            : "#5ce4ce"
+                            ? "#8f99ab"
+                            : "#4a618b"
                         }
                       />
                     ))}

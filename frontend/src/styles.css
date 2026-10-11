@@ -6,3 +6,628 @@
 @media(max-width:1000px){.sidebar{width:66px;padding:21px 9px}.sidebar-top{padding:0 4px 28px}.brand{justify-content:center}.brand>div:last-child{display:none}.nav-label{display:none}.navigation{gap:10px}.nav-item{width:45px;padding:0;margin:auto;justify-content:center}.nav-item span{display:none}.nav-item.active:before{left:-10px}.bottom-spaced,.sidenav-note,.sandbox-card,.sidebar-footer{display:none}.main{margin-left:66px;width:calc(100% - 66px)}.content{padding:25px}.layout-2-1{grid-template-columns:1fr 1fr}.hero-deco{right:-40px;opacity:.5}.stat-grid{grid-template-columns:repeat(2,1fr)}.data-grid{grid-template-columns:1fr}}
 @media(max-width:700px){.sidebar{display:none}.sidebar.open{display:flex;width:250px;padding:27px 18px}.sidebar.open .brand>div:last-child,.sidebar.open .nav-label,.sidebar.open .sidenav-note,.sidebar.open .sandbox-card,.sidebar.open .sidebar-footer{display:block}.sidebar.open .navigation{display:grid}.sidebar.open .nav-item{width:auto;justify-content:flex-start;padding:0 14px;margin:0}.sidebar.open .nav-item span{display:block}.sidebar.open .sidebar-footer{display:flex}.main{margin-left:0;width:100%}.menu-mobile,.mobile-close{display:block}.mobile-close{position:absolute;right:15px;top:22px}.topbar{height:61px;padding:0 18px}.topbar-right{gap:10px}.utc{display:none}.content{padding:16px}.hero{padding:23px;height:auto;min-height:265px}.hero-left{max-width:100%}.hero h1{font-size:34px}.hero p{font-size:11px;max-width:400px}.hero-deco{right:-145px;opacity:.2}.stat-grid{gap:10px}.layout-2-1{grid-template-columns:1fr}.section-toolbar{align-items:flex-start;flex-direction:column}.toolbar-actions{width:100%}.toolbar-actions .btn{flex:1}.data-alert{align-items:flex-start;flex-direction:column}.panel{padding:16px}.chart-wrap.performance{height:240px}.stat-value{font-size:28px}.sectionhead h2{font-size:22px}.section-head-right{display:none}.footer{flex-direction:column}.experiment-badge{display:none}}
 @media(max-width:380px){.hero h1{font-size:28px}.stat-card{padding:10px}.stat-value{font-size:23px}.stat-top{font-size:8px}.stat-foot{font-size:9px}.hero-actions{flex-wrap:wrap}.control-pair{gap:7px}.btn{font-size:9px;padding:9px}}
+
+/* =======================================
+   NEXUS ALPHA — PREMIUM VISUAL EFFECTS
+   ======================================= */
+
+/* Animated ambient lighting */
+.nexus-ambient-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 25% 35%,
+      rgba(71, 106, 255, 0.13),
+      transparent 47%
+    ),
+    radial-gradient(
+      ellipse at 75% 65%,
+      rgba(41, 225, 197, 0.10),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 60% 20%,
+      rgba(163, 96, 255, 0.09),
+      transparent 48%
+    );
+
+  animation: nexusAmbientFloat 16s ease-in-out
+    infinite alternate;
+}
+
+/* Interactive mouse-following light */
+.nexus-cursor-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 460px;
+  height: 460px;
+
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgba(67, 241, 219, 0.17) 0%,
+    rgba(154, 102, 255, 0.12) 35%,
+    transparent 70%
+  );
+
+  filter: blur(35px);
+
+  transform: translate3d(-1000px, -1000px, 0);
+  will-change: transform;
+}
+
+@keyframes nexusAmbientFloat {
+  from {
+    opacity: 0.5;
+    transform: translate3d(-1%, 0, 0) scale(1);
+  }
+
+  to {
+    opacity: 0.95;
+    transform: translate3d(1%, -1%, 0) scale(1.04);
+  }
+}
+
+/* Premium gradient heading */
+.hero h1 em,
+.hero h1 span {
+  background: linear-gradient(
+    110deg,
+    #78f5dc,
+    #b79aff,
+    #ecb3ff
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Refined dashboard typography */
+.hero h1,
+.sectionhead h2,
+.panel-head h3,
+.stat-value {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.hero h1 {
+  letter-spacing: -0.055em;
+  text-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* Smooth glass-card interactions */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .panel,
+  .stat-card,
+  .data-card {
+    transition:
+      transform 0.28s ease,
+      border-color 0.28s ease,
+      box-shadow 0.28s ease;
+  }
+
+  .panel:hover,
+  .stat-card:hover,
+  .data-card:hover {
+    transform: translateY(-3px);
+
+    border-color: rgba(119, 224, 216, 0.40);
+
+    box-shadow:
+      0 20px 45px rgba(0, 0, 0, 0.22),
+      0 0 25px rgba(103, 120, 245, 0.06);
+  }
+}
+
+/* Accessibility and mobile performance */
+@media (prefers-reduced-motion: reduce) {
+  .nexus-ambient-layer {
+    animation: none;
+  }
+
+  .nexus-cursor-layer {
+    display: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .nexus-cursor-layer {
+    display: none;
+  }
+}
+
+/* FIX: MAKE ANIMATED LIGHTING VISIBLE */
+
+.nexus-ambient-layer {
+  z-index: 9000;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(93, 70, 255, 0.28),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 60%,
+      rgba(0, 235, 215, 0.22),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 50% 80%,
+      rgba(227, 65, 255, 0.18),
+      transparent 45%
+    );
+
+  animation: nexusAmbientFloat 8s
+    ease-in-out infinite alternate;
+}
+
+.nexus-cursor-layer {
+  z-index: 9001;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 220, 0.42) 0%,
+    rgba(128, 85, 255, 0.25) 35%,
+    transparent 70%
+  );
+
+  filter: blur(25px);
+  opacity: 0.85;
+}
+
+/* =========================================
+   NEXUS ALPHA — PREMIUM GLASS UI
+   ========================================= */
+
+.panel,
+.stat-card,
+.data-card {
+  background: linear-gradient(
+    145deg,
+    rgba(24, 36, 65, 0.92),
+    rgba(13, 20, 38, 0.94)
+  );
+
+  border: 1px solid rgba(141, 167, 255, 0.16);
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+@media (hover: hover) and
+       (prefers-reduced-motion: no-preference) {
+
+  .panel,
+  .stat-card,
+  .data-card {
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .panel:hover,
+  .stat-card:hover,
+  .data-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(95, 236, 215, 0.45);
+
+    box-shadow:
+      0 18px 45px rgba(0, 0, 0, 0.3),
+      0 0 24px rgba(112, 90, 255, 0.11);
+  }
+}
+
+/* =========================================
+   NEXUS ALPHA — ANIMATED AURORA BACKGROUND
+   ========================================= */
+
+/* Main website background */
+body {
+  background-color: #070b19;
+
+  background-image:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgba(86, 54, 190, 0.26),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgba(0, 170, 210, 0.18),
+      transparent 50%
+    ),
+    linear-gradient(
+      135deg,
+      #070b19 0%,
+      #11152d 50%,
+      #080e1d 100%
+    );
+
+  background-attachment: fixed;
+}
+
+/* Moving colourful background layer */
+.nexus-ambient-layer {
+  position: fixed;
+  inset: -15%;
+
+  width: auto;
+  height: auto;
+
+  z-index: 9000;
+  pointer-events: none;
+
+  opacity: 0.7;
+  mix-blend-mode: screen;
+
+  background:
+    radial-gradient(
+      ellipse at 20% 35%,
+      rgba(107, 65, 255, 0.36),
+      transparent 43%
+    ),
+    radial-gradient(
+      ellipse at 75% 60%,
+      rgba(0, 225, 215, 0.29),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 55% 15%,
+      rgba(65, 110, 255, 0.29),
+      transparent 40%
+    );
+
+  filter: blur(65px);
+
+  animation: nexusAuroraShift 18s
+    ease-in-out infinite alternate;
+}
+
+/* Slow atmospheric movement */
+@keyframes nexusAuroraShift {
+  0% {
+    transform: translate3d(-3%, -2%, 0)
+      scale(1);
+  }
+
+  50% {
+    transform: translate3d(3%, 3%, 0)
+      scale(1.08);
+  }
+
+  100% {
+    transform: translate3d(-2%, 5%, 0)
+      scale(1.04);
+  }
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .nexus-ambient-layer {
+    animation: none;
+  }
+}
+
+/* ==========================================
+   NEXUS ALPHA — MONOCHROME PREMIUM THEME
+   ========================================== */
+
+/* Main black background */
+body {
+  background: linear-gradient(
+    135deg,
+    #030303 0%,
+    #111318 48%,
+    #050505 100%
+  ) !important;
+
+  background-attachment: fixed !important;
+}
+
+/* Animated black and silver atmosphere */
+.nexus-ambient-layer {
+  position: fixed;
+  inset: -15%;
+  z-index: 9000;
+  pointer-events: none;
+
+  opacity: 0.5;
+  mix-blend-mode: screen;
+
+  background:
+    radial-gradient(
+      ellipse at 25% 30%,
+      rgba(255, 255, 255, 0.13),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      rgba(185, 190, 200, 0.12),
+      transparent 45%
+    ),
+    linear-gradient(
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    auto,
+    auto,
+    65px 65px,
+    65px 65px;
+
+  animation: monoBackgroundMove 15s
+    ease-in-out infinite alternate;
+}
+
+/* Animated background movement */
+@keyframes monoBackgroundMove {
+  from {
+    transform: translate3d(-2%, -2%, 0);
+  }
+
+  to {
+    transform: translate3d(2%, 2%, 0);
+  }
+}
+
+/* White spotlight follows cursor */
+.nexus-cursor-layer {
+  z-index: 9001;
+  opacity: 0.65;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,255,255,0.26) 0%,
+    rgba(190,190,200,0.12) 35%,
+    transparent 70%
+  );
+
+  filter: blur(40px);
+}
+
+/* Dark glass cards */
+.panel,
+.stat-card,
+.data-card {
+  background: linear-gradient(
+    145deg,
+    rgba(25,25,28,0.92),
+    rgba(8,8,10,0.95)
+  ) !important;
+
+  border: 1px solid rgba(
+    255,255,255,0.14
+  ) !important;
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* Silver heading gradients */
+.hero h1 em,
+.hero h1 span {
+  background: linear-gradient(
+    110deg,
+    #ffffff,
+    #aeb3bd,
+    #eeeeee
+  ) !important;
+
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Floating glass-card animation */
+@media (hover: hover) and
+       (prefers-reduced-motion: no-preference) {
+
+  .panel:hover,
+  .stat-card:hover,
+  .data-card:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(
+      255,255,255,0.45
+    ) !important;
+
+    box-shadow:
+      0 18px 45px rgba(0,0,0,0.55),
+      0 0 28px rgba(255,255,255,0.08);
+  }
+}
+
+/* Respect reduced-motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .nexus-ambient-layer {
+    animation: none;
+  }
+
+  .nexus-cursor-layer {
+    display: none;
+  }
+}
+
+/* =======================================
+   NEXUS ALPHA — OBSIDIAN BLACK & SILVER
+   ======================================= */
+
+:root {
+  color: #f4f4f5;
+  background: #050505;
+}
+
+/* Allow the main background to show */
+body {
+  background: radial-gradient(
+    ellipse at 55% 30%,
+    #202024 0%,
+    #0b0b0e 45%,
+    #030303 100%
+  ) fixed !important;
+}
+
+.shell {
+  background: transparent !important;
+}
+
+/* Sidebar */
+.sidebar {
+  background: linear-gradient(
+    180deg,
+    #161616,
+    #090909 60%,
+    #050505
+  ) !important;
+
+  border-right: 1px solid #343434;
+}
+
+.topbar {
+  background: rgba(12, 12, 14, 0.93) !important;
+  border-bottom: 1px solid #333333;
+}
+
+/* Main hero card */
+.hero {
+  background:
+    radial-gradient(
+      circle at 85% 45%,
+      rgba(255,255,255,0.13),
+      transparent 45%
+    ),
+    linear-gradient(
+      120deg,
+      #202023,
+      #0e0e10 65%,
+      #19191b
+    ) !important;
+
+  border-color: #444444 !important;
+}
+
+/* Silver title */
+.hero h1 em,
+.hero h1 span {
+  background: linear-gradient(
+    120deg,
+    #ffffff,
+    #b0b0b5,
+    #eeeeee
+  ) !important;
+
+  background-clip: text !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Navigation */
+.nav-item {
+  color: #a9a9ae;
+}
+
+.nav-item:hover {
+  background: #242426 !important;
+  color: #ffffff !important;
+}
+
+.nav-item.active {
+  color: #ffffff !important;
+  background: #29292c !important;
+  border-color: #555555 !important;
+}
+
+.nav-item.active::before,
+.nav-active-indicator {
+  background: #ffffff !important;
+}
+
+/* Branding */
+.brand-name b,
+.brand-mark,
+.mini-eyebrow,
+.panel-eyebrow {
+  color: #d8d8dc !important;
+}
+
+.brand-mark {
+  background: #222225 !important;
+  border-color: #555555 !important;
+}
+
+/* Primary buttons */
+.btn.primary {
+  background: #eeeeef !important;
+  color: #101012 !important;
+  border-color: #ffffff !important;
+}
+
+.btn.primary:hover {
+  background: #c9c9cc !important;
+  box-shadow: 0 0 22px
+    rgba(255,255,255,0.18) !important;
+}
+
+/* Subtle ambient light */
+.nexus-ambient-layer {
+  opacity: 0.22 !important;
+}
+
+/* Soft white mouse spotlight */
+.nexus-cursor-layer {
+  opacity: 0.24 !important;
+
+  background: radial-gradient(
+    circle,
+    rgba(255,255,255,0.22),
+    rgba(180,180,190,0.08) 35%,
+    transparent 70%
+  ) !important;
+}
+
+/* Supporting cards */
+.sidenav-note,
+.sandbox-card,
+.insight-card {
+  background: linear-gradient(
+    140deg,
+    #202023,
+    #111113
+  ) !important;
+
+  border-color: #3c3c40 !important;
+}
+
+/* Accessible motion */
+@media (prefers-reduced-motion: reduce) {
+  .nexus-ambient-layer {
+    animation: none !important;
+  }
+}

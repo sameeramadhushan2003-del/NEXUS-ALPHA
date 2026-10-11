@@ -1,0 +1,456 @@
+/* =========================================================
+   NEXUS ALPHA — OBSIDIAN / SILVER DESIGN SYSTEM
+   Unified presentation-only theme. Keep app logic untouched.
+   Import this file LAST in frontend/src/main.jsx.
+   ========================================================= */
+
+:root {
+  color-scheme: dark;
+  --nx-bg: #08090b;
+  --nx-sidebar: #101114;
+  --nx-panel: #141519;
+  --nx-inset: #1c1d22;
+  --nx-input: #22242a;
+  --nx-border: #36383f;
+  --nx-border-soft: #2b2d33;
+  --nx-text: #f4f5f7;
+  --nx-silver: #c8cbd2;
+  --nx-muted: #9b9fa9;
+  --nx-white: #f0f1f3;
+  color: var(--nx-text);
+  background: var(--nx-bg);
+}
+
+html { background: var(--nx-bg) !important; }
+body {
+  color: var(--nx-text) !important;
+  background: radial-gradient(ellipse at 60% 5%, #222329 0%, #101115 43%, #08090b 80%) fixed !important;
+}
+.shell, .main { background: transparent !important; }
+::selection { background: #777b88 !important; color: #fff !important; }
+
+/* A very faint architectural grid behind the content */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .15;
+  background-image:
+    linear-gradient(#ffffff14 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff14 1px, transparent 1px);
+  background-size: 58px 58px;
+  mask-image: linear-gradient(to bottom, #0008, transparent 85%);
+}
+
+/* Navigation shell */
+.sidebar {
+  background: linear-gradient(155deg, #18191d 0%, #101115 54%, #090a0c 100%) !important;
+  border-right: 1px solid var(--nx-border) !important;
+}
+.topbar {
+  background: rgba(13, 14, 17, .94) !important;
+  border-bottom: 1px solid var(--nx-border-soft) !important;
+}
+.brand-mark, .avatar, .top-avatar {
+  background: #26282e !important;
+  border-color: #545760 !important;
+  color: #f2f2f3 !important;
+  box-shadow: none !important;
+}
+.brand-name b, .sidebar-note-icon, .footer i,
+.sandbox-row, .breadcrumb strong { color: var(--nx-silver) !important; }
+.brand-sub, .nav-label, .breadcrumb, .utc, .sidebar-footer small,
+.sidenav-note span { color: var(--nx-muted) !important; }
+.nav-item { color: #b1b3ba !important; }
+.nav-item:hover { background: #25262b !important; color: #fff !important; }
+.nav-item.active {
+  background: linear-gradient(105deg, #303136, #25262b) !important;
+  border: 1px solid #5a5d65 !important;
+  color: #fff !important;
+}
+.nav-item.active::before, .nav-active-indicator {
+  background: #f0f1f4 !important;
+  box-shadow: none !important;
+}
+.system-pill, .experiment-badge, .research-badge {
+  color: #e1e2e5 !important;
+  border: 1px solid #555760 !important;
+  background: #27292e !important;
+}
+.system-pill span, .ping, .tiny-dot, .ai-research-status-dot {
+  background: #dbdde2 !important;
+  box-shadow: 0 0 10px #ffffff44 !important;
+}
+
+/* Consistent top-level surfaces for EVERY page */
+.hero, .panel, .stat-card, .data-card,
+.market-terminal, .session-explorer, .pt-container,
+.ai-research-container, .sidenav-note, .sandbox-card,
+.insight-card {
+  color: var(--nx-text) !important;
+  background: linear-gradient(145deg, rgba(28,29,33,.97), rgba(13,14,17,.97)) !important;
+  border: 1px solid var(--nx-border) !important;
+  box-shadow: 0 14px 36px #00000030, inset 0 1px 0 #ffffff0b !important;
+  backdrop-filter: blur(12px);
+}
+.hero {
+  background: radial-gradient(circle at 79% 50%, #36373d80, transparent 43%),
+    linear-gradient(112deg, #1e1f23, #101114 75%, #191a1e) !important;
+}
+.hero p, .sectionhead p, .panel-subtitle,
+.market-terminal-header p, .session-header p, .pt-header p,
+.ai-research-header p, .ai-research-welcome p, .pt-chart-header p,
+.session-chart-card p, .insight-content > p, .data-card p {
+  color: var(--nx-muted) !important;
+}
+.hero h1, .sectionhead h2, .panel-head h3,
+.market-terminal h2, .session-header h2, .pt-header h2,
+.ai-research-header h2, .ai-research-welcome h3,
+.insight-content h3, .data-card h3 {
+  color: var(--nx-text) !important;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.hero h1 em, .hero h1 span {
+  background: linear-gradient(105deg, #fff, #b1b3bc 57%, #f4f5f7) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Headings, accents, and decorative geometry */
+.mini-eyebrow, .panel-eyebrow, .tiny-label, .section-kicker,
+.market-eyebrow, .session-eyebrow, .pt-eyebrow,
+.ai-research-label, .ai-research-status, .insight-label,
+.market-terminal-footer, .session-quality div, .pt-quality-item,
+.disclosure > div, .footer i { color: var(--nx-silver) !important; }
+.hero-laser, .d1, .d2, .d3 {
+  background: #d7d9df !important;
+  box-shadow: 0 0 12px #ffffff55 !important;
+}
+.ring, .r1, .r2, .r3 { border-color: #a4a8b347 !important; }
+.orbit-center {
+  background: radial-gradient(circle at 35% 30%, #6b6d77, #22242b 57%, #101115) !important;
+  border-color: #c6c8ce85 !important;
+  box-shadow: 0 0 36px #ffffff10, inset 0 0 24px #ffffff16 !important;
+}
+.orbit-center span { color: #f7f7f8 !important; text-shadow: 0 0 16px #ffffff55 !important; }
+.exp-mark, .stat-icon, .data-symbol, .data-symbol.purple,
+.insight-orb, .sidebar-note-icon, .ai-research-logo,
+.ai-research-avatar, .ai-research-message.user .ai-research-avatar,
+.activity-badge, .activity-badge.exit {
+  color: #e5e6ea !important;
+  background: #292b31 !important;
+  border: 1px solid #51545b !important;
+  box-shadow: none !important;
+}
+.stat-card.teal, .stat-card.violet, .stat-card.pink, .stat-card.amber {
+  color: #cfd1d7 !important;
+}
+.stat-value, .pt-stat strong, .session-stat strong,
+.pt-featured strong, .session-stat.highlight strong,
+.market-main-price, .market-highlow strong,
+.market-stats-grid strong { color: var(--nx-text) !important; }
+.stat-foot, .stat-top, .score-foot,
+.market-symbol, .market-highlow span, .market-stats-grid span,
+.pt-stat span, .pt-stat small, .session-stat span,
+.session-stat small, .ai-research-disclaimer,
+.ai-research-bubble small { color: var(--nx-muted) !important; }
+
+/* Inner cards and nested surfaces */
+.market-highlow, .market-stats-grid > div,
+.session-stat, .session-stat.highlight, .session-chart-card,
+.session-disclaimer, .pt-stat, .pt-featured, .pt-chart-card,
+.pt-quality-item, .pt-notes,
+.ai-research-welcome, .ai-research-form,
+.ai-research-bubble, .ai-research-message.user .ai-research-bubble,
+.ai-research-loading, .insight-points, .insight-points > div,
+.time-range, .data-alert, .data-alert.user-data,
+.disclosure, .tag, .pt-chart-switch, .sidenav-note,
+.sandbox-card {
+  color: var(--nx-text) !important;
+  background: var(--nx-inset) !important;
+  border-color: var(--nx-border) !important;
+}
+.ai-research-suggestions button, .pt-chart-switch button,
+.control-panel input, .control-panel select,
+.session-actions select, .session-actions button,
+.market-actions select, .market-actions button,
+.pt-controls select, .pt-controls button {
+  color: #eeeff1 !important;
+  background: var(--nx-input) !important;
+  border: 1px solid #4b4d55 !important;
+}
+.control-panel select option { background: #202126 !important; }
+.control-panel input:focus, .control-panel select:focus,
+.ai-research-form:focus-within,
+.session-actions select:focus-visible, .market-actions select:focus-visible,
+.pt-controls select:focus-visible {
+  outline: 2px solid #c8cad0 !important;
+  outline-offset: 2px;
+}
+.ai-research-suggestions button:hover,
+.market-actions button:hover, .pt-controls button:hover,
+.session-actions button:hover { background: #32343b !important; border-color: #aaaeb8 !important; }
+.ai-research-form textarea { color: #f4f5f7 !important; }
+.ai-research-form textarea::placeholder { color: #9599a3 !important; }
+
+/* Calls to action */
+.btn.primary, .ai-research-form-footer button {
+  color: #101114 !important;
+  background: linear-gradient(105deg, #ffffff, #d2d4da) !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 8px 25px #ffffff0d !important;
+}
+.btn.primary:hover, .ai-research-form-footer button:hover:not(:disabled) {
+  background: #e1e2e6 !important;
+  box-shadow: 0 0 24px #ffffff24 !important;
+}
+.btn.outline, .btn.subtle { background: #292a30 !important; border-color: #50535b !important; color: #eff0f1 !important; }
+.btn.outline:hover, .btn.subtle:hover { background: #383a40 !important; }
+.pt-chart-switch button.active, .time-range span {
+  color: #101114 !important;
+  background: #dadce1 !important;
+  border-color: #dadce1 !important;
+}
+.market-symbol span, .data-card code, .experiment-badge {
+  color: #e6e7eb !important;
+  background: #34363e !important;
+  border-color: #656872 !important;
+}
+
+/* Research integrity information: keep wording and hierarchy clear */
+.data-alert, .data-alert.user-data, .disclosure {
+  background: #191b20 !important;
+  border: 1px solid #555760 !important;
+  color: #bec1c9 !important;
+}
+.data-alert b, .data-alert.user-data b,
+.data-alert button, .disclosure > div { color: #eff0f3 !important; }
+.chart-footer, .score-row, .activity-row,
+.footer, .market-price-area { border-color: #34363d !important; }
+
+/* Chart axes and grid lines: monochrome framing, preserve series distinction */
+.recharts-cartesian-grid line { stroke: #454852 !important; stroke-opacity: .45 !important; }
+.recharts-cartesian-axis-tick-value { fill: #a4a7b1 !important; }
+.recharts-reference-line line { stroke: #8a8e98 !important; }
+
+/* Quiet ambient lighting; do not wash out text */
+.nexus-ambient-layer {
+  z-index: 8 !important;
+  opacity: .14 !important;
+  pointer-events: none !important;
+  mix-blend-mode: screen !important;
+  background:
+    radial-gradient(ellipse at 25% 30%, #ffffff36, transparent 46%),
+    radial-gradient(ellipse at 78% 67%, #b6bacb1c, transparent 49%) !important;
+  filter: blur(52px) !important;
+}
+.nexus-cursor-layer {
+  z-index: 9 !important;
+  opacity: .17 !important;
+  pointer-events: none !important;
+  background: radial-gradient(circle, #ffffff77 0%, #d8dbe433 32%, transparent 70%) !important;
+  filter: blur(38px) !important;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .panel, .stat-card, .data-card,
+  .market-terminal, .session-explorer, .pt-container, .ai-research-container {
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease !important;
+  }
+  .panel:hover, .stat-card:hover, .data-card:hover,
+  .market-terminal:hover, .session-explorer:hover, .pt-container:hover,
+  .ai-research-container:hover {
+    transform: translateY(-2px);
+    border-color: #777b85 !important;
+    box-shadow: 0 15px 40px #00000044, 0 0 0 1px #ffffff09 !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nexus-ambient-layer { animation: none !important; }
+  .nexus-cursor-layer { display: none !important; }
+}
+
+/* ==========================================
+   NEXUS ALPHA — PREMIUM CHART HOVER FIX
+   ========================================== */
+
+/* Dark, readable tooltips */
+.recharts-tooltip-wrapper
+.recharts-default-tooltip {
+  background: rgba(25, 28, 36, 0.97) !important;
+  border: 1px solid #414855 !important;
+  border-radius: 12px !important;
+
+  padding: 12px 16px !important;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(85, 222, 206, 0.04) !important;
+
+  backdrop-filter: blur(14px);
+}
+
+/* Tooltip heading */
+.recharts-tooltip-wrapper
+.recharts-tooltip-label {
+  color: #f3f5fa !important;
+  font-weight: 700 !important;
+  margin-bottom: 7px !important;
+}
+
+/* Tooltip series labels and values */
+.recharts-default-tooltip
+.recharts-tooltip-item-name {
+  color: #b0bac9 !important;
+}
+
+.recharts-default-tooltip
+.recharts-tooltip-item-value {
+  color: #f3f5fa !important;
+  font-weight: 700 !important;
+}
+
+.recharts-default-tooltip
+.recharts-tooltip-item-separator {
+  color: #8f9aaa !important;
+}
+
+/* Remove the huge grey highlight on bar charts */
+rect.recharts-tooltip-cursor {
+  fill: rgba(255, 255, 255, 0.045) !important;
+  stroke: none !important;
+}
+
+/* Elegant vertical hover indicator on line charts */
+path.recharts-tooltip-cursor {
+  fill: none !important;
+  stroke: rgba(185, 197, 215, 0.45) !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: 4 5 !important;
+}
+
+/* Make chart backgrounds consistent */
+.recharts-surface {
+  background: transparent !important;
+}
+
+/* Softer grid lines */
+.recharts-cartesian-grid line {
+  stroke: rgba(174, 185, 204, 0.13) !important;
+}
+
+/* Readable axis labels */
+.recharts-cartesian-axis-tick-value {
+  fill: #a2adbd !important;
+}
+
+/* Smooth appearance for tooltips */
+.recharts-tooltip-wrapper {
+  pointer-events: none;
+  z-index: 30;
+}
+
+/* Keep decorative cursor lighting subtle */
+.nexus-cursor-layer {
+  opacity: 0.14 !important;
+}
+
+/* ==========================================
+   NEXUS ALPHA — PREMIUM UI REFINEMENT
+   ========================================== */
+
+:root {
+  --nexus-text: #f3f5fa;
+  --nexus-muted: #a6aebc;
+  --nexus-accent: #65dccb;
+  --nexus-border: #343b47;
+}
+
+/* Professional typography */
+body {
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero h1,
+.sectionhead h2,
+.panel-head h3 {
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.035em;
+}
+
+.hero h1 {
+  line-height: 1.12;
+}
+
+.panel-subtitle {
+  color: var(--nexus-muted);
+  line-height: 1.6;
+}
+
+/* Premium button styling */
+.btn {
+  border-radius: 11px;
+  font-weight: 700;
+  letter-spacing: 0.015em;
+
+  transition:
+    transform 0.22s ease,
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+/* Subtle interaction effects */
+@media (hover: hover) and
+       (prefers-reduced-motion: no-preference) {
+
+  .btn:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+
+  .nav-item {
+    transition:
+      background-color 0.22s ease,
+      color 0.22s ease,
+      transform 0.22s ease;
+  }
+
+  .nav-item:hover {
+    transform: translateX(3px);
+  }
+}
+
+/* Visible keyboard focus */
+.btn:focus-visible,
+.nav-item:focus-visible,
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--nexus-accent);
+  outline-offset: 3px;
+}
+
+/* Smaller screens */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .btn {
+    min-height: 42px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .nav-item {
+    transition: none !important;
+    transform: none !important;
+  }
+}
