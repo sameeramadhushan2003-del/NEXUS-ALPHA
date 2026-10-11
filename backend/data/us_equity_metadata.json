@@ -1,0 +1,17 @@
+{
+  "source": "Yahoo Finance via yfinance",
+  "symbols": [
+    "NVDA",
+    "TSLA"
+  ],
+  "startDate": "2026-06-01",
+  "endDateExclusive": "2026-10-11",
+  "interval": "1d",
+  "priceField": "Unadjusted Close",
+  "observationsByAsset": {
+    "NVDA": 92,
+    "TSLA": 92
+  },
+  "downloadedAt": "2026-10-11T04:20:41.372659+00:00",
+  "note": "Daily US equity trading-session data. Not yet synchronized with Bitget UTC daily candles. Source accuracy requires independent verification."
+}

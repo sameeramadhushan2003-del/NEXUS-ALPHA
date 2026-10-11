@@ -1,0 +1,43 @@
+{
+  "assets": {
+    "BTC": {
+      "count": 128,
+      "firstDate": "2026-06-01",
+      "lastDate": "2026-10-09"
+    },
+    "NVDA": {
+      "count": 92,
+      "firstDate": "2026-06-01",
+      "lastDate": "2026-10-09"
+    },
+    "TSLA": {
+      "count": 92,
+      "firstDate": "2026-06-01",
+      "lastDate": "2026-10-09"
+    },
+    "rNVDA": {
+      "count": 128,
+      "firstDate": "2026-06-01",
+      "lastDate": "2026-10-09"
+    },
+    "rTSLA": {
+      "count": 128,
+      "firstDate": "2026-06-01",
+      "lastDate": "2026-10-09"
+    }
+  },
+  "calendarOverlap": {
+    "rNVDA_vs_NVDA": 90,
+    "rTSLA_vs_TSLA": 90,
+    "rNVDA_vs_BTC": 128,
+    "All_five_assets": 90
+  },
+  "sources": {
+    "rNVDA": "Bitget Agent Hub",
+    "rTSLA": "Bitget Agent Hub",
+    "BTC": "Bitget Agent Hub",
+    "NVDA": "Yahoo Finance",
+    "TSLA": "Yahoo Finance"
+  },
+  "warning": "Matching calendar dates does not mean matching exact market close times. Session-aware alignment is still required."
+}

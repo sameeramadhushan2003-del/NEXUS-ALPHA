@@ -1,0 +1,31 @@
+{
+  "method": "NYSE regular-session close matched to Bitget hourly candle end",
+  "excludedEarlyCloses": [],
+  "comparisons": {
+    "rNVDA_vs_NVDA": {
+      "regularStockSessions": 92,
+      "matchedSessions": 92,
+      "missingTokenDates": [],
+      "timestampMismatches": [],
+      "pairedReturnCount": 89,
+      "sessionAlignedCorrelation": 0.9994330504098098,
+      "utcDailyCorrelation": 0.3033827897114469
+    },
+    "rTSLA_vs_TSLA": {
+      "regularStockSessions": 92,
+      "matchedSessions": 92,
+      "missingTokenDates": [],
+      "timestampMismatches": [],
+      "pairedReturnCount": 89,
+      "sessionAlignedCorrelation": 0.9999141283068839,
+      "utcDailyCorrelation": 0.3167189064744692
+    }
+  },
+  "limitations": [
+    "Hourly token closes approximate the equity close",
+    "Yahoo historical prices are not independently verified",
+    "No missing prices were fabricated",
+    "Correlation does not establish causation",
+    "Results are exploratory, not predictive"
+  ]
+}

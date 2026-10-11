@@ -1,0 +1,236 @@
+
+/* =========================================
+   SESSION CORRELATION EXPLORER
+   ========================================= */
+
+.session-explorer {
+  margin: 30px 0;
+  padding: 28px;
+  background: #101a2c;
+  border: 1px solid #2a3852;
+  border-radius: 18px;
+  color: #ecf3ff;
+}
+
+/* Header */
+
+.session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.session-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #5ce4ce;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.session-header h2 {
+  margin: 12px 0 8px;
+  font-size: 25px;
+}
+
+.session-header p {
+  color: #98a8c2;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* Controls */
+
+.session-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.session-actions select,
+.session-actions button {
+  padding: 11px 13px;
+  background: #1c2a42;
+  border: 1px solid #374762;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.session-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.session-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Statistics */
+
+.session-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.session-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 19px;
+  background: #17243a;
+  border: 1px solid #293b55;
+  border-radius: 12px;
+}
+
+.session-stat.highlight {
+  background: #14332f;
+  border-color: #317e71;
+}
+
+.session-stat span {
+  color: #9baccc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+}
+
+.session-stat strong {
+  color: #f4f8ff;
+  font-size: 28px;
+  font-variant-numeric: tabular-nums;
+}
+
+.session-stat.highlight strong {
+  color: #65e6ce;
+}
+
+.session-stat small {
+  color: #8899b5;
+  font-size: 11px;
+}
+
+/* Chart */
+
+.session-chart-card {
+  margin-top: 20px;
+  padding: 24px;
+  background: #141f33;
+  border: 1px solid #293b55;
+  border-radius: 12px;
+}
+
+.session-chart-card h3 {
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.session-chart-card p {
+  color: #90a1bf;
+  font-size: 12px;
+  margin: 0;
+}
+
+.session-chart-area {
+  width: 100%;
+  height: 285px;
+  margin-top: 20px;
+}
+
+/* Quality indicators */
+
+.session-quality {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 22px;
+}
+
+.session-quality div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #6ce6cd;
+  font-size: 12px;
+}
+
+.session-quality strong {
+  color: #ffffff;
+}
+
+/* Research limitations */
+
+.session-disclaimer {
+  margin-top: 24px;
+  padding: 18px;
+  background: #172236;
+  border-radius: 10px;
+  color: #afbed6;
+  font-size: 12px;
+}
+
+.session-disclaimer strong {
+  color: #eaf2ff;
+}
+
+.session-disclaimer ul {
+  margin: 12px 0;
+  padding-left: 20px;
+  line-height: 1.8;
+}
+
+.session-disclaimer p {
+  margin: 10px 0 0;
+}
+
+/* Messages */
+
+.session-message {
+  color: #9baccc;
+  padding: 20px 0;
+}
+
+.session-error {
+  padding: 14px;
+  background: #492430;
+  color: #ffb5c5;
+  border-radius: 9px;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1100px) {
+  .session-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .session-explorer {
+    padding: 18px;
+  }
+
+  .session-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .session-actions {
+    width: 100%;
+  }
+
+  .session-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .session-chart-card {
+    padding: 14px;
+  }
+}

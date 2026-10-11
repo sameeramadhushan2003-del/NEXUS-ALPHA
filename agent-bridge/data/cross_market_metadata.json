@@ -1,0 +1,32 @@
+{
+  "source": "Bitget Agent Hub",
+  "action": "candlesHistory",
+  "category": "SPOT",
+  "interval": "1D",
+  "candleTimezone": "UTC",
+  "assets": [
+    {
+      "symbol": "RNVDAUSDT",
+      "asset": "rNVDA"
+    },
+    {
+      "symbol": "RTSLAUSDT",
+      "asset": "rTSLA"
+    },
+    {
+      "symbol": "BTCUSDT",
+      "asset": "BTC"
+    }
+  ],
+  "startDate": "2026-06-01",
+  "endDateExclusive": "2026-10-11",
+  "downloadedAt": "2026-10-11T03:44:00.816Z",
+  "observationsByAsset": {
+    "rNVDA": 128,
+    "rTSLA": 128,
+    "BTC": 129
+  },
+  "matchedObservations": 128,
+  "alignment": "Matching UTC daily candle timestamps",
+  "warning": "Not aligned to US equity closing times. Source and volume quality require further audit."
+}

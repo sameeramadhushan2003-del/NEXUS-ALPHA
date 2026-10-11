@@ -1,0 +1,43 @@
+{
+  "analysisType": "PRICE_TRACKING_AUDIT",
+  "generatedAt": "2026-10-11T06:01:06.499909+00:00",
+  "sourceFile": "session_aligned_pairs.csv",
+  "comparisons": {
+    "rNVDA_vs_NVDA": {
+      "matchedSessions": 92,
+      "returnObservations": 91,
+      "returnCorrelation": 0.9994191754914632,
+      "meanSignedPriceGapPct": -0.010751149184614449,
+      "meanAbsolutePriceGapPct": 0.025857706209816252,
+      "medianAbsolutePriceGapPct": 0.0140943189142817,
+      "maxAbsolutePriceGapPct": 0.3791610574587323,
+      "maxGapDate": "2026-06-26",
+      "returnDifferenceRmsePp": 0.08222327191498553,
+      "reviewThresholdPct": 1.0,
+      "reviewDateCount": 0,
+      "reviewDates": []
+    },
+    "rTSLA_vs_TSLA": {
+      "matchedSessions": 92,
+      "returnObservations": 91,
+      "returnCorrelation": 0.9999072284242211,
+      "meanSignedPriceGapPct": -0.01087165419775754,
+      "meanAbsolutePriceGapPct": 0.018741730420815516,
+      "medianAbsolutePriceGapPct": 0.005952068231812602,
+      "maxAbsolutePriceGapPct": 0.184348969168735,
+      "maxGapDate": "2026-06-26",
+      "returnDifferenceRmsePp": 0.047465722271749236,
+      "reviewThresholdPct": 1.0,
+      "reviewDateCount": 0,
+      "reviewDates": []
+    }
+  },
+  "limitations": [
+    "Stock prices are quoted in USD",
+    "Token prices are quoted in USDT",
+    "Equivalent economic units require verification",
+    "Hourly token closes approximate stock closes",
+    "Price gaps do not imply arbitrage opportunities",
+    "Historical correlation is not predictive"
+  ]
+}

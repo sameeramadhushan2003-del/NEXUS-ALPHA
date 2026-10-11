@@ -1,0 +1,7 @@
+fastapi>=0.110,<1
+uvicorn>=0.27,<1
+pandas>=2.0,<3
+numpy>=1.26,<3
+python-multipart>=0.0.9,<1
+pytest>=8,<10
+httpx>=0.25,<1

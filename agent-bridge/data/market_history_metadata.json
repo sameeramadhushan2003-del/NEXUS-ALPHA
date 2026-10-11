@@ -1,0 +1,22 @@
+{
+  "source": "Bitget Agent Hub",
+  "endpoint": "/api/v3/market/history-candles",
+  "action": "candlesHistory",
+  "category": "SPOT",
+  "interval": "1D",
+  "symbols": [
+    {
+      "symbol": "BTCUSDT",
+      "asset": "BTC"
+    },
+    {
+      "symbol": "ETHUSDT",
+      "asset": "ETH"
+    }
+  ],
+  "startDate": "2026-03-01",
+  "endDate": "2026-10-10",
+  "downloadedAt": "2026-10-11T03:16:52.643Z",
+  "pairedObservations": 220,
+  "note": "Public historical API data, not independently verified"
+}

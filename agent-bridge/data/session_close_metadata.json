@@ -1,0 +1,30 @@
+{
+  "source": "Bitget Agent Hub",
+  "action": "candlesHistory",
+  "interval": "1H",
+  "marketTimezone": "America/New_York",
+  "selectionRule": "Hourly candle ending at 16:00 New York local time",
+  "startUtc": "2026-06-01T00:00:00.000Z",
+  "endUtcExclusive": "2026-10-11T00:00:00.000Z",
+  "assets": [
+    {
+      "symbol": "RNVDAUSDT",
+      "asset": "rNVDA"
+    },
+    {
+      "symbol": "RTSLAUSDT",
+      "asset": "rTSLA"
+    }
+  ],
+  "observationsByAsset": {
+    "rNVDA": 126,
+    "rTSLA": 117
+  },
+  "downloadedAt": "2026-10-11T04:57:40.305Z",
+  "limitations": [
+    "Not all dates are stock trading sessions",
+    "Early stock-market closes are not handled yet",
+    "Source prices and volume require validation",
+    "An hourly close is only an approximation to the equity close"
+  ]
+}

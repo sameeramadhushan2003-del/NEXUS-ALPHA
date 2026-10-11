@@ -1,0 +1,17 @@
+# Private credentials
+.env
+.env.*
+backend/.env
+
+# Python environment
+backend/.venv/
+__pycache__/
+
+# Frontend dependencies
+node_modules/
+frontend/node_modules/
+
+# Local build files
+frontend/dist/
+# Local user-uploaded data
+backend/data/user_prices.csv
