@@ -1,122 +1,216 @@
 # NEXUS ALPHA — Cross-Market Intelligence Lab
 
-A full-stack **read-only educational research prototype** for the Cross-Market Correlation Strategies theme. Dark terminal UI, rolling correlation, return heatmap, evidence-grounded diagnostics, historical strategy simulation, and chronological holdout evaluation.
+**A read-only educational research dashboard for exploring relationships between tokenized stocks, conventional equities, and cryptocurrency market data.**
 
-> **CRITICAL:** The included dataset is wholly synthetic. No charts, returns or Sharpe ratios produced from it demonstrate real market performance. The app is not connected to an exchange, has no trading permissions, and does not place orders.
+NEXUS ALPHA combines a React research terminal, a FastAPI analytics backend, a Bitget Agent Hub read-only market-data bridge, and a Gemini-powered research assistant. It supports timestamp-aware historical analysis, session-aligned stock comparisons, CSV imports, and reproducible *simulated* strategy experiments.
 
-## Quick start — Windows 10/11, VS Code
+> **Research-only project.** NEXUS ALPHA does not place orders or connect to trading accounts. Historical correlations and simulations are not predictions, investment advice, or evidence of a profitable strategy. The synthetic demonstration dataset must not be presented as genuine historical evidence.
 
-### Terminal A — Python backend
+## Why NEXUS ALPHA?
 
-Open a terminal in `NEXUS_ALPHA/backend` and run:
+Cross-market comparisons can be misleading if two prices are sampled at different times. For example, a tokenized stock may update while its conventional stock market is closed. NEXUS ALPHA makes **data provenance, sampling timestamps, and research limitations** visible alongside charts and statistical results.
+
+## Features
+
+- **Research dashboard:** Indexed price comparisons, rolling Pearson correlations, asset correlation matrix, performance summaries, and visual exploration.
+- **Live public market feed:** BTC, ETH, and SOL spot tickers obtained via a local read-only Bitget Agent Hub bridge.
+- **Session Explorer:** Historical comparisons of `rNVDA` with `NVDA`, and `rTSLA` with `TSLA`, using stock-session-aligned data. These are separate from the three-asset strategy dataset.
+- **Price Tracking Intelligence:** Price-gap and return-alignment diagnostics for tokenized and conventional shares, with data-source caveats.
+- **Timestamp-validated historical dataset:** Matched Bitget `rNVDA`, `rTSLA`, and `BTC` daily candles indexed by when each candle's close became available.
+- **Historical Strategy Lab:** Adjustable lookback, signal threshold, holdout length, fee, and slippage assumptions, with explicit train/test separation.
+- **Research reliability checks:** Reports active test observations, position changes, and suppresses unsupported Sharpe/Sortino interpretations when activity is insufficient.
+- **Gemini Research Assistant:** Explains the locally supplied research reports in approachable language; uses report-derived context and acknowledges unavailable information.
+- **CSV upload and report export:** Analyze a user-supplied long-format price CSV or the included synthetic demonstration; uploaded-source provenance is explicitly unverified.
+- **Automated Python tests:** 12 locally verified passing tests covering the core engine and timestamp/reliability functionality.
+
+## Technology stack
+
+| Layer | Technologies | Purpose |
+|---|---|---|
+| Frontend | React, Vite, Recharts, Lucide | Dashboard and interactive research controls |
+| Research API | Python, FastAPI, Pandas, NumPy | Validation, statistics, historical simulation, AI endpoint |
+| Market-data bridge | Node.js, Bitget Agent SDK | Read-only public spot ticker requests |
+| AI assistant | Google Gemini (`google-genai`) | Natural-language explanations of provided research context |
+| Testing | Pytest | Backend regression tests |
+
+## System architecture
+
+```text
+Browser / React + Vite (http://127.0.0.1:5173)
+          |
+          | /api requests via Vite proxy
+          v
+FastAPI research backend (http://127.0.0.1:8000)
+   |            |                |
+   |            |                +--> Gemini API (optional, requires GEMINI_API_KEY)
+   |            +--> Local historical CSV files and generated JSON reports
+   |
+   +--> Read-only Agent Hub bridge (http://127.0.0.1:8001)
+                |
+                +--> Bitget public market data
+```
+
+All three local services should be running to use the complete research dashboard and live market feed. The Gemini assistant additionally requires an API key.
+
+## Quick start — Windows / PowerShell
+
+**Requirements:** Python with `venv`, Node.js with npm, Git, and three VS Code terminals. Run each terminal's commands from the indicated project subfolder.
+
+### Terminal 1 — Bitget Agent Hub bridge
 
 ```powershell
+cd agent-bridge
+npm install
+node server.mjs
+```
+
+Health check: <http://127.0.0.1:8001/health>
+
+### Terminal 2 — FastAPI backend
+
+```powershell
+cd backend
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python generate_demo.py
-uvicorn main:app --reload --port 8000
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --reload --port 8000
 ```
 
-If PowerShell blocks activation, use this **without activation** instead:
+If the virtual environment has already been created, skip `py -m venv .venv`. Health check: <http://127.0.0.1:8000/api/health>
 
-```powershell
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe generate_demo.py
-.\.venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000
+**Optional: Enable Gemini.** Create `backend/.env` locally and set:
+
+```dotenv
+GEMINI_API_KEY=your_own_key_here
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Health check: http://127.0.0.1:8000/api/health
+The model name must be one available to your Gemini API account. **Never commit `.env` or paste your API key into the README or source code.** Without a configured API key, the analytics dashboard can still run, but the AI chat endpoint will be unavailable.
 
-### Terminal B — React dashboard
-
-Open a second terminal in `NEXUS_ALPHA/frontend` and run:
+### Terminal 3 — React frontend
 
 ```powershell
+cd frontend
 npm install
 npm run dev
 ```
 
-Visit: http://127.0.0.1:5173
+Open <http://127.0.0.1:5173>. Do not open `index.html` directly. Vite proxies frontend `/api` requests to FastAPI on port 8000.
 
-Do not open `index.html` directly; both development servers should run.
+> Tip: In three separate VS Code terminals, `cd` into `agent-bridge`, `backend`, and `frontend`, respectively. Do not run all three `cd` commands in the same terminal.
 
-## What works
+## Data sources and research modes
 
-- Responsive financial-terminal dashboard with four KPI cards
-- Comparative 100-point indexed close charts
-- Rolling correlation and cross-asset Pearson matrix
-- Configurable historical long-only signal demonstration
-- Lagged signal formation to avoid using same-bar future returns
-- Fee and slippage assumptions (basis points)
-- Train / test split with at least 30 test observations
-- In/out-of-sample Sharpe, Sortino, drawdown, returns, positive active-session day rate, volatility and average turnover
-- Repeatable metrics from locally stored data
-- Historical CSV upload, template and reset to synthetic data
-- JSON report download
-- Four automated Python engine tests
+| Mode | Data | Interpretation |
+|---|---|---|
+| **Verified Bitget History** | Timestamp-checked historical daily data for `rNVDA`, `rTSLA`, `BTC` | Bitget-source historical analysis; *not independently verified market truth or predictive validation* |
+| **Uploaded CSV** | User-provided `date,asset,close` observations | Source, timestamps, asset identity, and sampling must be independently checked |
+| **Synthetic Demo** | Generated example observations | Software demonstrations only; not real historical evidence |
 
-## Limitations — must be resolved before genuine quantitative claims
+**Separate dataset:** Session Explorer and Price Tracking compare tokenized and conventional stock observations over **92 matched stock sessions**. This is *not* the same population as the **130 matched Bitget historical dates** used for the strategy dataset.
 
-- **Synthetic sample is not historical evidence.** Import independently sourced, verifiable real history for real evaluation.
-- Daily matched samples do not capture **weekend**, **pre-market** or **closed-cash-session** correlation shifts; intraday event-time alignment is future work.
-- The demo rule is a deliberately simple historical learning experiment, not a validated profitable edge.
-- Correlation is not causation. The demonstration computes rolling Pearson correlation between returns, not price levels.
-- The data parser normalizes dates in UTC. Real sources must first be adjusted for consistent sampling cutoffs, instrument identity, corporate actions, price and currency conventions.
-- No hyperparameter optimization. If you adjust settings after inspecting the holdout window, it is no longer an untouched out-of-sample test.
-- Actual financing, borrow fees, funding costs, spread impact, liquidity limits, dividend treatment and capacity analysis not yet implemented.
-- The research diagnostics currently use deterministic rules. A live LLM service is **not integrated**; this should be stated truthfully in any report.
+### Timestamp-validated strategy dataset
 
-## CSV schema
+- **130** matched dates for `rNVDA`, `rTSLA`, and `BTC`.
+- **125** consecutive usable observations in the longest uninterrupted segment.
+- **5** earlier observations excluded to avoid calculating across the missing daily candle that starts on **June 6, 2026**.
+- Bitget's observed 1-day candle boundaries start at **16:00 UTC**; a daily close is treated as available **24 hours after its candle start**.
+- Default illustration: **80 training observations** followed chronologically by **45 testing observations**, with the test period beginning at the **August 27, 2026** close.
 
-Long format, one row per day and asset:
+### A crucial reliability finding
+
+For the default `rNVDA`-versus-`BTC` historical simulation, the 45-observation test window included **only one active strategy observation**, one entry, and no exit. Reported illustrative out-of-sample returns vary with assumed costs (e.g., **0.36%** for 13 basis points total assumed fee/slippage), but **the annualized Sharpe ratio is intentionally unavailable** because there is too little activity for meaningful interpretation. These are not realized trading results. An open position may also mean eventual exit costs are not represented.
+
+## CSV upload format
+
+Use one observation per asset and date, with these exact column names:
 
 ```csv
 date,asset,close
 2026-01-02,rNVDA,100.25
 2026-01-02,BTC,80000.00
-2026-01-05,rNVDA,101.10
-2026-01-05,BTC,81000.00
+2026-01-03,rNVDA,101.10
+2026-01-03,BTC,81000.00
 ```
 
-For a meaningful experiment use at least ~100 matched dates (preferably substantially more), plus contemporaneous prices, clear provenance, and appropriate currency/time-zone adjustment.
+The backend requires at least **two assets**, **100 dates**, positive numeric closing prices, valid dates, and no duplicate date/asset pairs. Files larger than **5 MB** are rejected. Uploaded prices are **source-unverified** and can replace an earlier imported CSV; back up any important import before testing a new upload.
 
-## Strategy demonstration specification
+## Useful endpoints
 
-For asset A and reference B, calculate daily percentage returns, rolling correlation rho(A,B), beta(A,B), and residual return e(t)=rA(t)-beta(t)*rB(t). Compute the rolling z-score of residual e(t). If rho > 0.15 and z < -threshold at the close of day t, flag a **simulated long-only position for the next session**. Subtract fee and slippage when the simulated position changes. Compare to a passive same-asset baseline.
+| URL | Purpose |
+|---|---|
+| `/api/health` | FastAPI health status |
+| `/api/dashboard?dataset=verified` | Timestamp-validated historical research output |
+| `/api/dashboard?dataset=active` | Uploaded prices, or synthetic demo if no upload exists |
+| `/api/research/context` | Research reports and contextual facts supplied to Gemini |
+| `/api/ai/chat` | Gemini research chat (POST, requires API key) |
+| `/api/agent-hub/ticker?symbol=BTCUSDT` | Bitget public ticker through local bridge |
+| `/api/session-analysis` | Stock-session correlation research |
+| `/api/price-tracking` | Price-tracking report |
 
-This is a **toy rule**, deliberately disclosed. The output is educational, not investment guidance.
+Endpoints listed with relative paths are served by FastAPI at `http://127.0.0.1:8000`.
 
-## Re-run tests
+## Testing
+
+From the `backend` folder (with your virtual environment active), run:
 
 ```powershell
-cd backend
-pytest -q
+python -m pytest -q
 ```
 
-## Folder structure
+The latest local verification returned **12 passed**. The repository configures Pytest to use `backend/tests`, so an unrelated optional `test_huggingface.py` diagnostic script is not collected by the default test command. This statement describes a local test run, not a hosted CI workflow.
 
+For a frontend production-bundle check, run:
+
+```powershell
+cd frontend
+npm run build
 ```
+
+## Repository layout
+
+```text
 NEXUS_ALPHA/
+  agent-bridge/                 # Bitget Agent SDK bridge, market tools, audits
+    server.mjs
+    data/                      # Historical source and repair reports
   backend/
-    main.py                  # FastAPI app, upload, dashboard
-    engine.py                # metrics + backtest calculations
-    generate_demo.py         # fixed-seed synthetic data generator
-    data/demo_prices.csv     # synthetic (NOT genuine historical data)
-    tests/test_engine.py     # automated tests
+    main.py                    # Research API, CSV import, Gemini endpoint
+    engine.py                  # Analysis and historical simulation
+    run_timestamped_strategy.py
+    build_timestamped_history.py
+    audit_strategy_reliability.py
+    data/                      # Derived price history and research reports
+    tests/                     # Automated tests
     requirements.txt
+    pytest.ini
   frontend/
-    src/App.jsx              # React dashboard and controls
-    src/styles.css           # exchange-terminal inspired theme
-    src/main.jsx
-    index.html
-    vite.config.js
+    src/                       # React pages and research panels
     package.json
-  docs/
-    RESEARCH_PLAN.md
-    EVIDENCE_CHECKLIST.md
+    vite.config.js
+  docs/                        # Research plans and supporting notes
+  README.md
 ```
 
-## Research ethics
+## Limitations and responsible interpretation
 
-No trading accounts, exchange accounts or financial credentials required. No orders are placed. Use only appropriately licensed, non-personal historical market data. Do not submit synthetic backtests as if they were real validation.
+1. **No execution:** The project is read-only and does not place orders or provide a live execution system.
+2. **Historical ≠ predictive:** Correlations and small-sample simulated backtests cannot establish future results.
+3. **Timestamp consistency:** Incorrectly mixing 24-hour token markets with limited-hour equity sessions can produce misleading statistics.
+4. **Data provenance:** Bitget-source timestamp checks do not independently certify every market value. Yahoo Finance and tokenized equity prices can have different conventions.
+5. **Low strategy activity:** With only one active test observation, annualized performance ratios would be misleading and are withheld.
+6. **Simplifying assumptions:** Trading friction is modeled using user-set basis points; the simulation does not capture every real-market cost, liquidity constraint, funding effect, or corporate action.
+7. **AI explanations:** Gemini answers depend on the supplied local report context. Verify its claims against the underlying report rather than treating generated text as a primary source.
+8. **User uploads:** User-uploaded files are not automatically independent, accurate, licensed, or comparable across timestamps/currencies.
+
+## Project status
+
+- Working React interface, FastAPI backend, and read-only Bitget Agent Hub bridge.
+- Verified historical-data option and dataset provenance labels integrated into the dashboard.
+- Gemini explanations connected to session, tracking, timestamp, and reliability reports.
+- 12 backend automated tests passed locally.
+- Intended as a **hackathon research demonstration**, not a production trading or investment system.
+
+## Repository
+
+<https://github.com/sameeramadhushan2003-del/NEXUS-ALPHA>
