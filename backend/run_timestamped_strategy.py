@@ -104,7 +104,7 @@ def load_timestamped_prices():
         )
 
     # Each observed candle must span 24 hours.
-    
+
 # Calculate the duration in seconds.
 # One complete daily candle = 86,400 seconds.
 

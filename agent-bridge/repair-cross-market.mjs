@@ -189,7 +189,6 @@ async function fetchDailyCandle(item, date) {
       `${item.asset}: Invalid API response`
     );
   }
-  
   // ========================================
   // DEBUG: INSPECT RETURNED DAILY CANDLES
   // ========================================
@@ -219,9 +218,8 @@ async function fetchDailyCandle(item, date) {
   console.table(returnedCandles);
 
 
-  
-const matching = result.data.filter((row) => {
 
+const matching = result.data.filter((row) => {
   if (!Array.isArray(row) || row.length < 6) {
     return false;
   }
