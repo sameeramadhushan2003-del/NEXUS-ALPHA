@@ -1,0 +1,59 @@
+{
+  "project": "NEXUS ALPHA",
+  "analysis": "Timestamp-aware historical validation",
+  "sourceFile": "timestamp_aware_history.csv",
+  "originalObservations": 130,
+  "missingCandleClosesUtc": [
+    "2026-06-07T16:00:00Z"
+  ],
+  "continuousObservations": 125,
+  "excludedObservations": 5,
+  "firstAvailableCloseUtc": "2026-06-08T16:00:00Z",
+  "lastAvailableCloseUtc": "2026-10-10T16:00:00Z",
+  "stats": {
+    "all": {
+      "returnPct": 0.88,
+      "sharpe": 2.09,
+      "sortino": 8.16,
+      "maxDrawdownPct": -0.13,
+      "positiveActiveDayPct": 100.0,
+      "turnoverPct": 4.0,
+      "volatilityPct": 1.23
+    },
+    "inSample": {
+      "returnPct": 0.52,
+      "sharpe": 1.77,
+      "sortino": 6.01,
+      "maxDrawdownPct": -0.13,
+      "positiveActiveDayPct": 100.0,
+      "turnoverPct": 5.0,
+      "volatilityPct": 1.33
+    },
+    "outOfSample": {
+      "returnPct": 0.36,
+      "sharpe": 2.85,
+      "sortino": null,
+      "maxDrawdownPct": 0.0,
+      "positiveActiveDayPct": 100.0,
+      "turnoverPct": 2.2,
+      "volatilityPct": 1.03
+    },
+    "trainDays": 80,
+    "testDays": 45,
+    "splitDate": "2026-08-27",
+    "activeDays": 3,
+    "lastCorr": 0.288,
+    "lastZ": 0.13,
+    "costBps": 13,
+    "periodsPerYear": 365,
+    "sharpeDecayFlag": false
+  },
+  "limitations": [
+    "Only completed daily candles are used",
+    "A disconnected segment was excluded",
+    "Signals are delayed by one observation",
+    "Simulated fills and costs are assumptions",
+    "Results do not establish predictive ability",
+    "No real trades or orders are executed"
+  ]
+}

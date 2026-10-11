@@ -1,0 +1,331 @@
+{
+  "project": "NEXUS ALPHA",
+  "analysis": "Historical return interval audit",
+  "comparisons": {
+    "rNVDA_vs_BTC": {
+      "pair": "rNVDA_vs_BTC",
+      "calendar": "daily",
+      "observations": 128,
+      "expectedDates": 131,
+      "missingExpectedDates": [
+        "2026-06-06",
+        "2026-07-30",
+        "2026-09-28"
+      ],
+      "multiDayIntervals": 3,
+      "gapDetails": [
+        {
+          "previousDate": "2026-06-05",
+          "currentDate": "2026-06-07",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 2.0621
+        },
+        {
+          "previousDate": "2026-07-29",
+          "currentDate": "2026-07-31",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 3.2824
+        },
+        {
+          "previousDate": "2026-09-27",
+          "currentDate": "2026-09-29",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 0.3868
+        }
+      ]
+    },
+    "rTSLA_vs_BTC": {
+      "pair": "rTSLA_vs_BTC",
+      "calendar": "daily",
+      "observations": 128,
+      "expectedDates": 131,
+      "missingExpectedDates": [
+        "2026-06-06",
+        "2026-07-30",
+        "2026-09-28"
+      ],
+      "multiDayIntervals": 3,
+      "gapDetails": [
+        {
+          "previousDate": "2026-06-05",
+          "currentDate": "2026-06-07",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 2.7577
+        },
+        {
+          "previousDate": "2026-07-29",
+          "currentDate": "2026-07-31",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 1.3464
+        },
+        {
+          "previousDate": "2026-09-27",
+          "currentDate": "2026-09-29",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": -2.7119
+        }
+      ]
+    },
+    "rNVDA_vs_NVDA": {
+      "pair": "rNVDA_vs_NVDA",
+      "calendar": "nyse",
+      "observations": 90,
+      "expectedDates": 92,
+      "missingExpectedDates": [
+        "2026-07-30",
+        "2026-09-28"
+      ],
+      "multiDayIntervals": 19,
+      "gapDetails": [
+        {
+          "previousDate": "2026-06-05",
+          "currentDate": "2026-06-08",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -0.49
+        },
+        {
+          "previousDate": "2026-06-12",
+          "currentDate": "2026-06-15",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 1.7732
+        },
+        {
+          "previousDate": "2026-06-18",
+          "currentDate": "2026-06-22",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": -3.2088
+        },
+        {
+          "previousDate": "2026-06-26",
+          "currentDate": "2026-06-29",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 4.2061
+        },
+        {
+          "previousDate": "2026-07-02",
+          "currentDate": "2026-07-06",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": -0.1538
+        },
+        {
+          "previousDate": "2026-07-10",
+          "currentDate": "2026-07-13",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 0.0
+        },
+        {
+          "previousDate": "2026-07-17",
+          "currentDate": "2026-07-20",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 1.7454
+        },
+        {
+          "previousDate": "2026-07-24",
+          "currentDate": "2026-07-27",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -2.7271
+        },
+        {
+          "previousDate": "2026-07-29",
+          "currentDate": "2026-07-31",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 3.2824
+        },
+        {
+          "previousDate": "2026-07-31",
+          "currentDate": "2026-08-03",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 5.6619
+        },
+        {
+          "previousDate": "2026-08-07",
+          "currentDate": "2026-08-10",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -1.9825
+        },
+        {
+          "previousDate": "2026-08-14",
+          "currentDate": "2026-08-17",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -2.2454
+        },
+        {
+          "previousDate": "2026-08-21",
+          "currentDate": "2026-08-24",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -1.7423
+        },
+        {
+          "previousDate": "2026-08-28",
+          "currentDate": "2026-08-31",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 0.5662
+        },
+        {
+          "previousDate": "2026-09-04",
+          "currentDate": "2026-09-08",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": -2.7388
+        },
+        {
+          "previousDate": "2026-09-11",
+          "currentDate": "2026-09-14",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -3.1186
+        },
+        {
+          "previousDate": "2026-09-18",
+          "currentDate": "2026-09-21",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 2.8632
+        },
+        {
+          "previousDate": "2026-09-25",
+          "currentDate": "2026-09-29",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": 2.992
+        },
+        {
+          "previousDate": "2026-10-02",
+          "currentDate": "2026-10-05",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 3.1374
+        }
+      ]
+    },
+    "rTSLA_vs_TSLA": {
+      "pair": "rTSLA_vs_TSLA",
+      "calendar": "nyse",
+      "observations": 90,
+      "expectedDates": 92,
+      "missingExpectedDates": [
+        "2026-07-30",
+        "2026-09-28"
+      ],
+      "multiDayIntervals": 19,
+      "gapDetails": [
+        {
+          "previousDate": "2026-06-05",
+          "currentDate": "2026-06-08",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 0.2658
+        },
+        {
+          "previousDate": "2026-06-12",
+          "currentDate": "2026-06-15",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 0.0476
+        },
+        {
+          "previousDate": "2026-06-18",
+          "currentDate": "2026-06-22",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": -3.7545
+        },
+        {
+          "previousDate": "2026-06-26",
+          "currentDate": "2026-06-29",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 10.0172
+        },
+        {
+          "previousDate": "2026-07-02",
+          "currentDate": "2026-07-06",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": 2.1759
+        },
+        {
+          "previousDate": "2026-07-10",
+          "currentDate": "2026-07-13",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -2.0401
+        },
+        {
+          "previousDate": "2026-07-17",
+          "currentDate": "2026-07-20",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -0.3947
+        },
+        {
+          "previousDate": "2026-07-24",
+          "currentDate": "2026-07-27",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -0.5611
+        },
+        {
+          "previousDate": "2026-07-29",
+          "currentDate": "2026-07-31",
+          "elapsedCalendarDays": 2,
+          "primaryReturnPct": 1.3464
+        },
+        {
+          "previousDate": "2026-07-31",
+          "currentDate": "2026-08-03",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 4.8082
+        },
+        {
+          "previousDate": "2026-08-07",
+          "currentDate": "2026-08-10",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 0.9746
+        },
+        {
+          "previousDate": "2026-08-14",
+          "currentDate": "2026-08-17",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -0.5356
+        },
+        {
+          "previousDate": "2026-08-21",
+          "currentDate": "2026-08-24",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -2.0751
+        },
+        {
+          "previousDate": "2026-08-28",
+          "currentDate": "2026-08-31",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 2.7455
+        },
+        {
+          "previousDate": "2026-09-04",
+          "currentDate": "2026-09-08",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": 4.3279
+        },
+        {
+          "previousDate": "2026-09-11",
+          "currentDate": "2026-09-14",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": -1.243
+        },
+        {
+          "previousDate": "2026-09-18",
+          "currentDate": "2026-09-21",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 3.4366
+        },
+        {
+          "previousDate": "2026-09-25",
+          "currentDate": "2026-09-29",
+          "elapsedCalendarDays": 4,
+          "primaryReturnPct": -5.6731
+        },
+        {
+          "previousDate": "2026-10-02",
+          "currentDate": "2026-10-05",
+          "elapsedCalendarDays": 3,
+          "primaryReturnPct": 2.6609
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Multi-day returns must not be labeled as single-day returns",
+    "NYSE weekends and holidays are normal market closures",
+    "Crypto-linked prices may have missing calendar dates",
+    "No missing observations were filled",
+    "This audit does not establish predictive performance"
+  ]
+}

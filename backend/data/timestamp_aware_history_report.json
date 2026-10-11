@@ -1,0 +1,43 @@
+{
+  "project": "NEXUS ALPHA",
+  "source": "Bitget Agent Hub",
+  "inputFile": "cross_market_history_repaired.csv",
+  "outputFile": "timestamp_aware_history.csv",
+  "timestampConvention": "Each 1D candle starts at 16:00 UTC and its close is available 24 hours later",
+  "timestampEvidence": "Historical API timestamp audit and daily-versus-hourly candle comparison",
+  "records": 390,
+  "matchedDates": 130,
+  "missingDates": [
+    "2026-06-06"
+  ],
+  "gapDetails": [
+    {
+      "asset": "BTC",
+      "previousDate": "2026-06-05",
+      "currentDate": "2026-06-07",
+      "elapsedDays": 2,
+      "missingDays": 1
+    },
+    {
+      "asset": "rNVDA",
+      "previousDate": "2026-06-05",
+      "currentDate": "2026-06-07",
+      "elapsedDays": 2,
+      "missingDays": 1
+    },
+    {
+      "asset": "rTSLA",
+      "previousDate": "2026-06-05",
+      "currentDate": "2026-06-07",
+      "elapsedDays": 2,
+      "missingDays": 1
+    }
+  ],
+  "limitations": [
+    "Candle close is not available at candle start",
+    "Reconstructed timestamps follow the verified API convention",
+    "Missing calendar dates are not filled",
+    "Multi-day returns require special treatment",
+    "This file is not yet validated for backtesting"
+  ]
+}

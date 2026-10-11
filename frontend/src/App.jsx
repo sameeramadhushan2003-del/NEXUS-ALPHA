@@ -246,6 +246,7 @@ function App() {
   const [oos, setOos] = useState(45);
   const [fee, setFee] = useState(5);
   const [slippage, setSlippage] = useState(8);
+  const [dataset, setDataset] = useState("active");
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
   const [chartMode, setChartMode] = useState("NORMALIZED");
@@ -260,7 +261,8 @@ function App() {
       os = oos,
       f = fee,
       sl = slippage,
-    ) => {
+      ds = dataset,
+      ) => {
       setBusy(true);
       setError("");
       try {
@@ -272,6 +274,7 @@ function App() {
           oos_days: os,
           fee_bps: f,
           slippage_bps: sl,
+          dataset: ds,
         });
         const res = await fetch(`${API}/dashboard?${qs}`);
         const json = await res.json();
@@ -283,9 +286,9 @@ function App() {
         setBusy(false);
       }
     },
-    [primary, reference, lookback, threshold, oos, fee, slippage],
+    [primary, reference, lookback, threshold, oos, fee, slippage,dataset],
   );
-  
+
 useEffect(() => {
   fetchDashboard(
     "rNVDA",
@@ -309,7 +312,145 @@ useEffect(() => {
   const rows = result?.chart || [];
   const dataMode = result?.meta?.dataMode || "LOADING";
   const isDemo = dataMode.includes("SYNTHETIC");
+  const isVerified = result?.meta?.dataset === "verified";
   const metrics = result?.stats || {};
+
+  // ==========================================
+  // RESEARCH RELIABILITY - POSITION ACTIVITY
+  // ==========================================
+
+  // Select only testing-period observations.
+  const reliabilityTestRows = rows.filter(
+    (row) => row.phase === "TEST"
+  );
+
+  // Find the position immediately before testing.
+  const reliabilityLastTrain = rows
+    .filter((row) => row.phase === "TRAIN")
+    .at(-1);
+
+  let previousReliabilityPosition = Number(
+    reliabilityLastTrain?.position ?? 0
+  );
+
+  let reliabilityEntries = 0;
+  let reliabilityExits = 0;
+
+  // Compare consecutive simulated positions.
+  for (const row of reliabilityTestRows) {
+    const currentPosition = Number(
+      row.position ?? 0
+    );
+
+    if (
+      previousReliabilityPosition === 0 &&
+      currentPosition !== 0
+    ) {
+      reliabilityEntries++;
+    } else if (
+      previousReliabilityPosition !== 0 &&
+      currentPosition === 0
+    ) {
+      reliabilityExits++;
+    } else if (
+      previousReliabilityPosition !== 0 &&
+      currentPosition !== 0 &&
+      previousReliabilityPosition !== currentPosition
+    ) {
+      // A change of direction counts as
+      // closing one position and opening another.
+      reliabilityExits++;
+      reliabilityEntries++;
+    }
+
+    previousReliabilityPosition = currentPosition;
+  }
+
+  // Check the final testing observation.
+  const reliabilityOpenAtEnd =
+    reliabilityTestRows.length > 0
+      ? previousReliabilityPosition !== 0
+      : null;
+
+
+  // ==========================================
+  // STRATEGY RELIABILITY INFORMATION
+  // ==========================================
+
+  // Select only the out-of-sample observations.
+  const testRows = rows.filter(
+    (row) => row.phase === "TEST"
+  );
+
+  // Count observations with an active position.
+  const activeTestDays =
+    metrics.outOfSample?.activeObservations ??
+    (testRows.length > 0
+      ? testRows.filter(
+          (row) => Number(row.position ?? 0) !== 0
+        ).length
+      : null);
+
+  // Total out-of-sample observations.
+  const totalTestDays =
+    metrics.testDays ?? (testRows.length || null);
+
+  // Check whether the engine has enough
+  // observations to report reliable ratios.
+  const insufficientActivity =
+    metrics.outOfSample?.ratioStatus ===
+    "INSUFFICIENT_ACTIVITY";
+
+  // Count historical position transitions.
+  const testActivity = (() => {
+    const lastTrainingRow = rows
+      .filter((row) => row.phase === "TRAIN")
+      .at(-1);
+
+    let previousPosition = Number(
+      lastTrainingRow?.position ?? 0
+    );
+
+    let entries = 0;
+    let exits = 0;
+
+    for (const row of testRows) {
+      const currentPosition = Number(
+        row.position ?? 0
+      );
+
+      if (
+        previousPosition === 0 &&
+        currentPosition !== 0
+      ) {
+        entries++;
+      } else if (
+        previousPosition !== 0 &&
+        currentPosition === 0
+      ) {
+        exits++;
+      } else if (
+        previousPosition !== 0 &&
+        currentPosition !== 0 &&
+        previousPosition !== currentPosition
+      ) {
+        entries++;
+        exits++;
+      }
+
+      previousPosition = currentPosition;
+    }
+
+    return {
+      entries,
+      exits,
+      openAtEnd:
+        testRows.length > 0
+          ? previousPosition !== 0
+          : null,
+    };
+  })();
+
   const currentCorr = metrics.lastCorr;
   const recentData = rows.slice(-150);
   const correlationLast = recentData.filter((x) => x.correlation != null);
@@ -332,7 +473,8 @@ useEffect(() => {
         next.includes("BTC") && p !== "BTC" ? "BTC" : next.find((x) => x !== p);
       setPrimary(p);
       setReference(r);
-      await fetchDashboard(p, r, 25, 1.25, 45, 5, 8);
+      setDataset("active");
+      await fetchDashboard(p, r, 25, 1.25, 45, 5, 8, "active");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -346,14 +488,15 @@ useEffect(() => {
       if (!res.ok) throw Error("Cannot restore demo");
       setPrimary("rNVDA");
       setReference("BTC");
-      await fetchDashboard("rNVDA", "BTC", 25, 1.25, 45, 5, 8);
+      setDataset("active");
+      await fetchDashboard("rNVDA", "BTC", 25, 1.25, 45, 5, 8, "active");
     } catch (e) {
       setError(e.message);
     }
   };
-  
+
 const menu = [
-  
+
   {
     name: "Overview",
     icon: Grid2X2,
@@ -533,9 +676,24 @@ const menu = [
               <Info size={18} />
               <span>
                 <b>{dataMode}</b> —{" "}
-                {isDemo
-                  ? "All prices and performance values are invented for software testing. They do not represent historical market performance."
-                  : "Uploaded prices are user supplied; verify timestamps, provenance, missing observations and consistency before drawing conclusions."}
+
+{isDemo
+  ? (
+      "All prices and performance values are invented for software testing. They do not represent historical market performance."
+    )
+  : isVerified
+    ? (
+        `Historical prices obtained through Bitget's public market API. ` +
+        `Daily candle closes are indexed by their availability times. ` +
+        `${result?.meta?.continuousObservations ?? "—"} continuous observations used; ` +
+        `${result?.meta?.excludedObservations ?? "—"} observations excluded due to a missing date. ` +
+        `Results are illustrative historical research, not predictions.`
+      )
+    : (
+        "Uploaded prices are user supplied; verify timestamps, provenance, missing observations and consistency before drawing conclusions."
+      )
+}
+
               </span>
             </div>
             <button
@@ -597,13 +755,23 @@ const menu = [
               icon={Waves}
               accent="teal"
             />
-            <Stat
-              label="OUT-OF-SAMPLE SHARPE"
-              value={fmt(metrics.outOfSample?.sharpe)}
-              detail={`Test-only • ${metrics.testDays || "—"} observations`}
-              icon={Activity}
-              accent="violet"
-            />
+
+<Stat
+  label="OUT-OF-SAMPLE SHARPE"
+  value={
+    insufficientActivity
+      ? "N/A"
+      : fmt(metrics.outOfSample?.sharpe)
+  }
+  detail={
+    insufficientActivity
+      ? "Insufficient historical activity"
+      : `Test-only • ${metrics.testDays ?? "—"} observations`
+  }
+  icon={Activity}
+  accent="violet"
+/>
+
             <Stat
               label="MAX. SIMULATED DRAWDOWN"
               value={fmt(metrics.all?.maxDrawdownPct)}
@@ -881,6 +1049,98 @@ const menu = [
               </span>
             }
           />
+
+{/* ==========================================
+    RESEARCH RELIABILITY PANEL
+========================================== */}
+
+{result && (
+
+
+
+<Card
+  title="Research Reliability"
+  eyebrow="OUT-OF-SAMPLE EVIDENCE CHECK"
+>
+  <div className="score-table">
+
+    {/* Table Headings */}
+    <div className="score-row score-head">
+      <span>METRIC</span>
+      <span>VALUE</span>
+      <span>STATUS</span>
+    </div>
+
+    {/* Active Observations */}
+    <div className="score-row">
+      <span>Active Observations</span>
+      <b>
+        {metrics.outOfSample?.activeObservations ?? "—"}
+        {" / "}
+        {metrics.testDays ?? "—"}
+      </b>
+      <b>HISTORICAL</b>
+    </div>
+
+    {/* Sharpe Ratio */}
+    <div className="score-row">
+      <span>Sharpe Ratio</span>
+      <b>
+        {metrics.outOfSample?.sharpe == null
+          ? "Unavailable"
+          : fmt(metrics.outOfSample.sharpe)}
+      </b>
+      <b>
+        {metrics.outOfSample?.ratioStatus ===
+        "INSUFFICIENT_ACTIVITY"
+          ? "INSUFFICIENT ACTIVITY"
+          : "REVIEW"}
+      </b>
+    </div>
+
+    {/* Simulated Entries and Exits */}
+    <div className="score-row">
+      <span>Simulated Entries / Exits</span>
+      <b>
+        {reliabilityTestRows.length > 0
+          ? `${reliabilityEntries} / ${reliabilityExits}`
+          : "—"}
+      </b>
+      <b>TEST PERIOD</b>
+    </div>
+
+    {/* Final Position Status */}
+    <div className="score-row">
+      <span>Final Position</span>
+      <b>
+        {reliabilityOpenAtEnd === null
+          ? "—"
+          : reliabilityOpenAtEnd
+            ? "Still Active"
+            : "Closed / Flat"}
+      </b>
+      <b>
+        {reliabilityOpenAtEnd === true
+          ? "OPEN AT END"
+          : "HISTORICAL"}
+      </b>
+    </div>
+
+  </div>
+
+  <div className="control-note">
+    <Info size={15} />
+    <span>
+      Historical simulation only.
+      Performance results depend on the
+      currently loaded dataset.
+    </span>
+  </div>
+</Card>
+
+)}
+
+
           <div className="layout-2-1 strategy-area">
             <Card
               title="Cost-Aware Backtest"
@@ -973,6 +1233,48 @@ const menu = [
               eyebrow="CONFIGURE / REPRODUCE"
               className="control-panel"
             >
+
+{/* Historical Dataset Selector */}
+
+<label>
+  HISTORICAL DATA SOURCE
+
+  <select
+    value={dataset}
+    onChange={(e) => {
+      const selected = e.target.value;
+
+      setDataset(selected);
+
+      // The verified dataset contains only
+      // rNVDA, rTSLA, and BTC.
+      if (selected === "verified") {
+        const allowed = [
+          "rNVDA",
+          "rTSLA",
+          "BTC"
+        ];
+
+        if (
+          !allowed.includes(primary) ||
+          !allowed.includes(reference)
+        ) {
+          setPrimary("rNVDA");
+          setReference("BTC");
+        }
+      }
+    }}
+  >
+    <option value="active">
+      Current Dataset / Demo
+    </option>
+
+    <option value="verified">
+      Verified Bitget History
+    </option>
+  </select>
+</label>
+
               <label>
                 PRIMARY ASSET
                 <select

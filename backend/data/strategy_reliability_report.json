@@ -1,0 +1,49 @@
+{
+  "project": "NEXUS ALPHA",
+  "analysis": "Historical strategy reliability audit",
+  "dataSource": "Timestamp-aware historical prices",
+  "pair": "rNVDA vs BTC",
+  "validatedObservations": 125,
+  "periodsPerYear": 365,
+  "activity": {
+    "trainingObservations": 80,
+    "testingObservations": 45,
+    "activeTestDays": 1,
+    "inactiveTestDays": 44,
+    "activeTestPct": 2.22,
+    "testEntries": 1,
+    "testExits": 0,
+    "totalPositionChanges": 1
+  },
+  "costScenarios": {
+    "No assumed costs": {
+      "costBps": 0,
+      "oosReturnPct": 0.49,
+      "oosSharpe": null,
+      "oosMaxDrawdownPct": 0.0,
+      "oosVolatilityPct": 1.4
+    },
+    "Current costs": {
+      "costBps": 13,
+      "oosReturnPct": 0.36,
+      "oosSharpe": null,
+      "oosMaxDrawdownPct": 0.0,
+      "oosVolatilityPct": 1.03
+    },
+    "Double costs": {
+      "costBps": 26,
+      "oosReturnPct": 0.23,
+      "oosSharpe": null,
+      "oosMaxDrawdownPct": 0.0,
+      "oosVolatilityPct": 0.66
+    }
+  },
+  "limitations": [
+    "Historical simulation only",
+    "Sharpe uses a limited test period",
+    "Transaction costs are assumptions",
+    "Signal construction is unchanged",
+    "No real orders are executed",
+    "Results are not predictive evidence"
+  ]
+}

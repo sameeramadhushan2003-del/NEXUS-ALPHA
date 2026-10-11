@@ -4,6 +4,15 @@ from dotenv import load_dotenv
 from pydantic import BaseModel, Field
 from fastapi import HTTPException
 
+from typing import Literal
+
+from run_timestamped_strategy import (
+    INPUT_FILE as VERIFIED_HISTORY_FILE,
+    load_timestamped_prices,
+    longest_contiguous_period,
+)
+
+
 from google import genai
 from google.genai import types
 from hashlib import sha256
@@ -35,19 +44,167 @@ def active_path():
 def health():
     return {'status':'ok','mode':'USER UPLOAD — VERIFY SOURCE' if IMPORTED.exists() else 'SYNTHETIC DEMONSTRATION','tradeExecution':False}
 
-@app.get('/api/dashboard')
-def dashboard(primary:str='rNVDA',reference:str='BTC',lookback:int=Query(25,ge=15,le=70),
-              threshold:float=Query(1.25,ge=.5,le=3.5),oos_days:int=Query(45,ge=30,le=140),
-              fee_bps:float=Query(5,ge=0,le=100),slippage_bps:float=Query(8,ge=0,le=100)):
+
+@app.get("/api/dashboard")
+def dashboard(
+    primary: str = "rNVDA",
+    reference: str = "BTC",
+
+    lookback: int = Query(
+        25, ge=15, le=70
+    ),
+
+    threshold: float = Query(
+        1.25, ge=0.5, le=3.5
+    ),
+
+    oos_days: int = Query(
+        45, ge=30, le=140
+    ),
+
+    fee_bps: float = Query(
+        5, ge=0, le=100
+    ),
+
+    slippage_bps: float = Query(
+        8, ge=0, le=100
+    ),
+
+    dataset: Literal["active", "verified"] = "active"
+):
+
     try:
-        prices=load_prices(active_path())
-        result=evaluate(prices,primary,reference,lookback,threshold,oos_days,fee_bps,slippage_bps)
-        result['meta']['dataMode']='USER UPLOAD — SOURCE UNVERIFIED' if IMPORTED.exists() else 'SYNTHETIC / ILLUSTRATIVE'
-        result['meta']['dataSHA256']=sha256(active_path().read_bytes()).hexdigest()
-        result['meta']['sourceFilename']=active_path().name
+
+        # =====================================
+        # 1. SELECT HISTORICAL DATASET
+        # =====================================
+
+        if dataset == "verified":
+
+            # Load prices indexed by the time
+            # their daily candles finished.
+            timestamped_prices = (
+                load_timestamped_prices()
+            )
+
+            # Use the longest period without
+            # missing daily observations.
+            prices = longest_contiguous_period(
+                timestamped_prices
+            )
+
+            source_path = VERIFIED_HISTORY_FILE
+
+            data_mode = (
+                "BITGET HISTORICAL DATA / "
+                "TIMESTAMP-VALIDATED RESEARCH"
+            )
+
+            # Only these three assets exist
+            # in the verified dataset.
+            if (
+                primary not in prices.columns
+                or reference not in prices.columns
+            ):
+                raise ValueError(
+                    "Verified history supports only "
+                    "rNVDA, rTSLA and BTC."
+                )
+
+        else:
+
+            # Preserve the original behavior:
+            # uploaded historical data or demo.
+            source_path = active_path()
+
+            prices = load_prices(
+                source_path
+            )
+
+            data_mode = (
+                "USER UPLOAD — SOURCE UNVERIFIED"
+                if IMPORTED.exists()
+                else "SYNTHETIC / ILLUSTRATIVE"
+            )
+
+        # =====================================
+        # 2. RUN THE EXISTING RESEARCH ENGINE
+        # =====================================
+
+        result = evaluate(
+            prices,
+            primary,
+            reference,
+            lookback,
+            threshold,
+            oos_days,
+            fee_bps,
+            slippage_bps
+        )
+
+        # =====================================
+        # 3. ATTACH DATASET INFORMATION
+        # =====================================
+
+        result["meta"]["dataMode"] = data_mode
+
+        result["meta"]["dataset"] = dataset
+
+        result["meta"]["dataSHA256"] = (
+            sha256(
+                source_path.read_bytes()
+            ).hexdigest()
+        )
+
+        result["meta"]["sourceFilename"] = (
+            source_path.name
+        )
+
+        # =====================================
+        # 4. PROVIDE VERIFICATION DETAILS
+        # =====================================
+
+        if dataset == "verified":
+
+            result["meta"][
+                "originalMatchedObservations"
+            ] = len(timestamped_prices)
+
+            result["meta"][
+                "continuousObservations"
+            ] = len(prices)
+
+            result["meta"][
+                "excludedObservations"
+            ] = (
+                len(timestamped_prices) - len(prices)
+            )
+
+            result["meta"]["timestampNote"] = (
+                "Bitget daily candles start at "
+                "16:00 UTC. Closing prices are "
+                "indexed 24 hours later."
+            )
+
+            result["meta"]["researchWarning"] = (
+                "Historical simulation only. "
+                "No predictive performance or "
+                "real execution is established."
+            )
+
+        # =====================================
+        # 5. SEND RESPONSE TO REACT
+        # =====================================
+
         return result
-    except ValueError as exc:
-        raise HTTPException(422,str(exc))
+
+    except (ValueError, FileNotFoundError) as exc:
+
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc)
+        )
+
 
 @app.post('/api/import')
 async def import_prices(file:UploadFile=File(...)):
@@ -135,7 +292,7 @@ async def get_bitget_ticker(
             status_code=503,
             detail="Agent Hub bridge is unavailable"
         )
-    
+
 # ==========================================
 # SESSION CORRELATION ANALYSIS API
 # ==========================================
@@ -382,40 +539,57 @@ RESEARCH_DATA_DIR = (
 )
 
 
+
 @app.get("/api/research/context")
 def get_research_context():
 
-    session_file = (
-        RESEARCH_DATA_DIR
-        / "session_alignment_report.json"
-    )
+    # ======================================
+    # 1. LOCATE RESEARCH REPORTS
+    # ======================================
 
-    tracking_file = (
-        RESEARCH_DATA_DIR
-        / "price_tracking_report.json"
-    )
+    report_files = {
+        "session": (
+            RESEARCH_DATA_DIR
+            / "session_alignment_report.json"
+        ),
+        "tracking": (
+            RESEARCH_DATA_DIR
+            / "price_tracking_report.json"
+        ),
+        "timestamps": (
+            RESEARCH_DATA_DIR
+            / "timestamp_aware_history_report.json"
+        ),
+        "strategy": (
+            RESEARCH_DATA_DIR
+            / "timestamp_strategy_report.json"
+        ),
+        "reliability": (
+            RESEARCH_DATA_DIR
+            / "strategy_reliability_report.json"
+        )
+    }
 
     # ======================================
-    # 1. READ VERIFIED RESEARCH REPORTS
+    # 2. LOAD ALL FIVE REPORTS
     # ======================================
+
+    reports = {}
 
     try:
-        with session_file.open(
-            "r",
-            encoding="utf-8"
-        ) as file:
-            session_report = json.load(file)
+        for name, path in report_files.items():
 
-        with tracking_file.open(
-            "r",
-            encoding="utf-8"
-        ) as file:
-            tracking_report = json.load(file)
+            with path.open(
+                "r",
+                encoding="utf-8"
+            ) as file:
 
-    except FileNotFoundError:
+                reports[name] = json.load(file)
+
+    except FileNotFoundError as exc:
         raise HTTPException(
             status_code=404,
-            detail="Research reports are missing"
+            detail=f"Research report missing: {exc.filename}"
         )
 
     except (OSError, ValueError):
@@ -424,8 +598,14 @@ def get_research_context():
             detail="Unable to read research reports"
         )
 
+    session_report = reports["session"]
+    tracking_report = reports["tracking"]
+    timestamp_report = reports["timestamps"]
+    strategy_report = reports["strategy"]
+    reliability_report = reports["reliability"]
+
     # ======================================
-    # 2. COMBINE THE RESEARCH RESULTS
+    # 3. EXISTING STOCK-SESSION COMPARISONS
     # ======================================
 
     comparisons = {}
@@ -454,7 +634,6 @@ def get_research_context():
             )
 
         comparisons[pair] = {
-
             "matchedSessions": session.get(
                 "matchedSessions"
             ),
@@ -493,7 +672,162 @@ def get_research_context():
         }
 
     # ======================================
-    # 3. PREPARE CONTEXT FOR THE AI MODEL
+    # 4. NEW TIMESTAMP-VALIDATED STRATEGY
+    # ======================================
+
+    strategy_stats = strategy_report.get(
+        "stats", {}
+    )
+
+    oos_stats = strategy_stats.get(
+        "outOfSample", {}
+    )
+
+    activity = reliability_report.get(
+        "activity", {}
+    )
+
+    matched_dates = timestamp_report.get(
+        "matchedDates"
+    )
+
+    continuous = strategy_report.get(
+        "continuousObservations"
+    )
+
+    excluded = strategy_report.get(
+        "excludedObservations"
+    )
+
+    if not all(
+        isinstance(value, int)
+        for value in [
+            matched_dates,
+            continuous,
+            excluded
+        ]
+    ):
+        raise HTTPException(
+            status_code=500,
+            detail="Strategy observation counts are missing"
+        )
+
+    if matched_dates != continuous + excluded:
+        raise HTTPException(
+            status_code=500,
+            detail="Strategy observation counts are inconsistent"
+        )
+
+    timestamped_strategy = {
+
+        "datasetName": (
+            "Timestamp-Validated Bitget "
+            "Cross-Market Strategy Dataset"
+        ),
+
+        "assets": [
+            "rNVDA",
+            "rTSLA",
+            "BTC"
+        ],
+
+        "matchedHistoricalDates": matched_dates,
+
+        "continuousStrategyObservations": continuous,
+
+        "excludedObservations": excluded,
+
+        "missingCandleStartDates": (
+            timestamp_report.get(
+                "missingDates", []
+            )
+        ),
+
+        "exclusionExplanation": (
+            "The longest uninterrupted period "
+            "was selected because the June 6, "
+            "2026 daily candle is missing from "
+            "the common three-asset dataset. "
+            "Five earlier observations were "
+            "excluded rather than joining returns "
+            "across that missing date."
+        ),
+
+        "candleStartTimeUtc": "16:00",
+
+        "candleDurationHours": 24,
+
+        "candleTimestampExplanation": (
+            "Bitget daily candle timestamps "
+            "mark candle opening. Closing "
+            "prices are treated as available "
+            "24 hours after their opening timestamps."
+        ),
+
+        "firstAvailableCloseUtc": (
+            strategy_report.get(
+                "firstAvailableCloseUtc"
+            )
+        ),
+
+        "lastAvailableCloseUtc": (
+            strategy_report.get(
+                "lastAvailableCloseUtc"
+            )
+        ),
+
+        "trainingObservations": activity.get(
+            "trainingObservations"
+        ),
+
+        "testingObservations": activity.get(
+            "testingObservations"
+        ),
+
+        "activeTestObservations": activity.get(
+            "activeTestDays"
+        ),
+
+        "inactiveTestObservations": activity.get(
+            "inactiveTestDays"
+        ),
+
+        "testEntries": activity.get(
+            "testEntries"
+        ),
+
+        "testExits": activity.get(
+            "testExits"
+        ),
+
+        "illustrativeOosReturnPct": (
+            oos_stats.get("returnPct")
+        ),
+
+        "illustrativeOosSharpe": (
+            oos_stats.get("sharpe")
+        ),
+
+        "sharpeReliabilityStatus": (
+            oos_stats.get("ratioStatus")
+        ),
+
+        "costSensitivity": reliability_report.get(
+            "costScenarios", {}
+        ),
+
+        "researchWarning": (
+            "The holdout contains too little "
+            "position activity to interpret "
+            "annualized Sharpe as reliable "
+            "evidence. Historical simulation "
+            "results do not establish future "
+            "performance."
+        )
+    }
+
+    # ======================================
+    # 5. RETURN COMPLETE GEMINI CONTEXT
     # ======================================
 
     return {
@@ -503,8 +837,8 @@ def get_research_context():
         "project": "NEXUS ALPHA",
 
         "researchType": (
-            "Cross-market historical "
-            "correlation intelligence"
+            "Educational cross-market "
+            "historical research"
         ),
 
         "dataSources": [
@@ -512,23 +846,50 @@ def get_research_context():
             "Yahoo Finance historical stock prices"
         ],
 
+        # Existing research results
         "comparisons": comparisons,
 
+        # New verified strategy results
+        "timestampValidatedStrategy": (
+            timestamped_strategy
+        ),
+
         "importantRules": [
-            "Use only verified research figures",
-            "Explain correlation in simple English",
-            "Do not claim correlation proves causation",
+            "Use only figures supported by the reports",
+            "Explain technical concepts in simple English",
+            "Distinguish matched stock sessions from strategy dates",
+            "92 matched stock sessions and 130 matched Bitget dates refer to different datasets",
+            "125 continuous strategy observations remain after excluding 5 earlier observations",
+            "Do not invent missing observations",
+            "Do not treat candle opening timestamps as closing-price availability times",
+            "Explain insufficient strategy activity clearly",
+            "Do not report an unavailable Sharpe as zero",
+            "Correlation does not prove causation",
             "Do not interpret price gaps as guaranteed profit",
             "Distinguish USD prices from USDT prices",
-            "Explain the difference between 89 and 91 return observations",
             "Acknowledge data-source limitations",
             "Do not provide trading recommendations"
         ],
 
-        "analysisLimitations": list(dict.fromkeys(
-            session_report.get("limitations", [])
-            + tracking_report.get("limitations", [])
-        ))
+        "analysisLimitations": list(
+            dict.fromkeys(
+                session_report.get(
+                    "limitations", []
+                )
+                + tracking_report.get(
+                    "limitations", []
+                )
+                + timestamp_report.get(
+                    "limitations", []
+                )
+                + strategy_report.get(
+                    "limitations", []
+                )
+                + reliability_report.get(
+                    "limitations", []
+                )
+            )
+        )
     }
 
 # ==========================================
@@ -581,13 +942,35 @@ def gemini_research_chat(request: GeminiChatRequest):
 
     research = get_research_context()
 
+
+    # ======================================
+    # SEND ALL VERIFIED RESEARCH TO GEMINI
+    # ======================================
+
     research_facts = {
+
+        # Basic project information
         "project": research["project"],
+
         "researchType": research["researchType"],
+
         "dataSources": research["dataSources"],
+
+        # Existing 92-session stock comparisons
         "comparisons": research["comparisons"],
+
+        # NEW: 130-date Bitget historical dataset
+        "timestampValidatedStrategy": (
+            research["timestampValidatedStrategy"]
+        ),
+
+        # Research interpretation rules
+        "importantRules": research["importantRules"],
+
+        # Known research limitations
         "limitations": research["analysisLimitations"]
     }
+
 
     # ======================================
     # 4. DEFINE THE AI'S RESPONSIBILITIES
@@ -660,7 +1043,7 @@ def gemini_research_chat(request: GeminiChatRequest):
             config=types.GenerateContentConfig(
                 system_instruction=system_instruction,
                 temperature=0.2,
-                max_output_tokens=500
+                max_output_tokens=800
             )
         )
 

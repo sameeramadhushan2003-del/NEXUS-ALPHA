@@ -1,0 +1,49 @@
+{
+  "project": "NEXUS ALPHA",
+  "source": "Bitget Agent Hub",
+  "interval": "1D",
+  "originalRecords": 384,
+  "recoveredRecords": 6,
+  "totalRecords": 390,
+  "matchedDates": 130,
+  "recovered": [
+    {
+      "date": "2026-07-30",
+      "asset": "rNVDA",
+      "close": 196.31,
+      "candleTimestampUtc": "2026-07-30T16:00:00.000Z"
+    },
+    {
+      "date": "2026-07-30",
+      "asset": "rTSLA",
+      "close": 307.578,
+      "candleTimestampUtc": "2026-07-30T16:00:00.000Z"
+    },
+    {
+      "date": "2026-07-30",
+      "asset": "BTC",
+      "close": 62720.96,
+      "candleTimestampUtc": "2026-07-30T16:00:00.000Z"
+    },
+    {
+      "date": "2026-09-28",
+      "asset": "rNVDA",
+      "close": 230.4591,
+      "candleTimestampUtc": "2026-09-28T16:00:00.000Z"
+    },
+    {
+      "date": "2026-09-28",
+      "asset": "rTSLA",
+      "close": 354.295,
+      "candleTimestampUtc": "2026-09-28T16:00:00.000Z"
+    },
+    {
+      "date": "2026-09-28",
+      "asset": "BTC",
+      "close": 83083.78,
+      "candleTimestampUtc": "2026-09-28T16:00:00.000Z"
+    }
+  ],
+  "unresolvedDate": "2026-06-06",
+  "note": "Only verified Bitget daily closes were used. No prices were estimated or forward-filled."
+}

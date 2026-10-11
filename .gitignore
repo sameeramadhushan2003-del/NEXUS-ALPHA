@@ -15,3 +15,6 @@ frontend/node_modules/
 frontend/dist/
 # Local user-uploaded data
 backend/data/user_prices.csv
+# Ignore temporary and backed-up user-uploaded data
+backend/data/user_prices_backup_*.csv
+backend/data/pending_upload.csv
