@@ -23,6 +23,23 @@ Cross-market comparisons can be misleading if two prices are sampled at differen
 - **CSV upload and report export:** Analyze a user-supplied long-format price CSV or the included synthetic demonstration; uploaded-source provenance is explicitly unverified.
 - **Automated Python tests:** 12 locally verified passing tests covering the core engine and timestamp/reliability functionality.
 
+## Application Screenshots
+
+### NEXUS ALPHA Dashboard
+![Dashboard](docs/screenshots/01-overview.png)
+
+### Market Intelligence
+![Market Intelligence](docs/screenshots/02-market-intelligence.png)
+
+### Session Explorer
+![Session Explorer](docs/screenshots/03-session-explorer.png)
+
+### Historical Strategy Lab
+![Strategy Lab](docs/screenshots/04-strategy-lab.png)
+
+### Gemini AI Research Assistant
+![AI Research](docs/screenshots/05-ai-research.png)
+
 ## Technology stack
 
 | Layer | Technologies | Purpose |
